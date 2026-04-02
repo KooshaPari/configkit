@@ -1,44 +1,39 @@
 [package]
-name = "configkit"
+[package]
+name = "settly"
 version = "0.1.0"
 edition = "2021"
 authors = ["Phenotype Team"]
-description = "Universal configuration management with layered configs and validation"
+description = "Settings management with validation, versioning, and migration support"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/configkit"
-documentation = "https://docs.rs/configkit"
-keywords = ["config", "configuration", "settings", "env", "environment"]
-categories = ["config", "development-tools"]
+repository = "https://github.com/phenotype-dev/settly"
+documentation = "https://docs.rs/settly"
+keywords = ["settings", "config", "validation", "migration"]
+categories = ["config", "validation"]
+rust-version = "1.75"
 
 [dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1"
+
 # Serialization
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 toml = "0.8"
-serde_yaml = "0.9"
-
-# Environment
-env_logger = "0.11"
-dirs = "5.0"
 
 # Error handling
-thiserror = "1.0"
+thiserror = "2.0"
 anyhow = "1.0"
-
-# File watching
-notify = "6.1"
-notify-debouncer-mini = "0.4"
 
 # Logging
 tracing = "0.1"
 
-# Async
-tokio = { version = "1.35", features = ["fs", "sync", "macros"] }
+# UUID
+uuid = { version = "1", features = ["v4", "serde"] }
 
 [dev-dependencies]
-tempfile = "3.8"
-tokio-test = "0.4"
+tempfile = "3"
 
 [profile.release]
 lto = true
-codegen-units = 1
