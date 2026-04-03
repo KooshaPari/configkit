@@ -1,39 +1,17 @@
 name: Security Guard
-
 on:
-  pull_request:
-    branches: [main]
   push:
-    branches: [main]
-
+    branches: [main, master]
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *'
 jobs:
-  security-guard:
+  trivy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@master
         with:
-          persist-credentials: false
-
-      - name: Run security audit
-        run: |
-          if command -v cargo &> /dev/null; then
-            cargo install cargo-audit || true
-            cargo audit || echo "No audit.toml found"
-          elif command -v go &> /dev/null; then
-            go install golang.org/x/vuln/cmd/govulncheck@latest
-            govulncheck ./... || echo "No vulns found"
-          fi
-
-      - name: Check for secrets
-        run: |
-          if command -v gitleaks &> /dev/null; then
-            gitleaks detect --source . --verbose
-          else
-            echo "gitleaks not installed, skipping"
-          fi
-
-      - name: Dependency review
-        uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: high
-          license-check: true
+          scan-type: 'fs'
+          severity: 'CRITICAL,HIGH'
